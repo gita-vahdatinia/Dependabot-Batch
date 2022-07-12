@@ -7,5 +7,5 @@ inputs:
 runs:
   using: "composite"
   steps:       
-    - run: test.sh ${{ inputs.prs }}
+    - run: test.sh
       shell: bash
