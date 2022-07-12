@@ -1,0 +1,11 @@
+name: 'Batch'
+description: 'Batch'
+inputs:
+ prs:  # id of input
+    description: 'Which PRs to Batch'
+    required: true
+runs:
+  using: "composite"
+  steps:       
+    - run: test.sh ${{ inputs.prs }}
+      shell: bash
