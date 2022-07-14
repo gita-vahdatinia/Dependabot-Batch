@@ -1,28 +1,13 @@
-name: 'Hello World'
-description: 'Greet someone'
-inputs:
-  prs:  # id of input
-    description: 'Who to greet'
-    required: true
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
+name: 'Batch Dependabot'
+description: 'Batch dependabot'
 runs:
   using: "composite"
   steps:
-    - run: echo Hello ${{ inputs.prs }}.
-      shell: bash
     - run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
-      shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-number::$(echo $RANDOM)"
-      shell: bash
+      shell: bash  
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
-      shell: bash          
-    - run: test.sh ${{ inputs.prs }}
+      shell: bash               
+    - run: batch.sh
       shell: bash 
-      env:
-        PRS: ${{ inputs.prs }}
