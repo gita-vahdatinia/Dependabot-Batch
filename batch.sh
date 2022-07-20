@@ -25,10 +25,10 @@ for br in $(echo "${LIST_OF_BRANCHES}" | sort); do
   git diff "origin/${br}~...origin/${br}" -- ${PACKAGE_FILES} | git apply -C0 && PATCHED+=(${br}) || echo "${bldred}WARNING: Skipping failed patch ${br}${txtdef}"
 done
 
-if [[ -z "${PATCHED[*]}" ]]; then
-  echo "${bldred}ERROR: all patches failed ¯\_(ツ)_/¯"
-  exit 1
-fi
+# if [[ -z "${PATCHED[*]}" ]]; then
+#   echo "${bldred}ERROR: all patches failed ¯\_(ツ)_/¯"
+#   exit 1
+# fi
 
 # Finalize tweaks to yarn.lock file by installing from package.json
 # if [[ "${PATCHED[*]}" == *"/npm_and_yarn/"* ]]; then
