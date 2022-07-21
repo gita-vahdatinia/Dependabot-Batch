@@ -25,6 +25,7 @@ for br in $(echo "${LIST_OF_BRANCHES}" | sort); do
   git diff "origin/${br}~...origin/${br}" -- ${PACKAGE_FILES} | git apply -C0 && PATCHED+=(${br}) || echo "${bldred}WARNING: Skipping failed patch ${br}${txtdef}"
 done
 
+cat package.json
 # if [[ -z "${PATCHED[*]}" ]]; then
 #   echo "${bldred}ERROR: all patches failed ¯\_(ツ)_/¯"
 #   exit 1
