@@ -80,12 +80,14 @@ echo ${GITHUB_REPOSITORY}
 echo ${GITHUB_BODY}
 echo ${BRANCH_TITLE}
 echo ${GITHUB_TOKEN}
+PR_HEAD="github-actions:${BRANCH_TITLE}"
+echo ${PR_HEAD}
 
 RESPONSE=$(curl --location --request POST \
   "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls" \
   -H 'Accept: application/vnd.github+json' \
   -H "Authorization: token ${GITHUB_TOKEN}" \
-  --data-raw '{"title":"'"$PR_TITLE"'","body": "''$GITHUB_BODY''", "head":"github-actions:'"$BRANCH_TITLE"'","base":"main"}')
+  --data-raw '{"title":"'"$PR_TITLE"'","body": "''$GITHUB_BODY''", "head":"'"$BRANCH_TITLE"'","base":"main"}')
 PULL_NUMBER=$(echo "${RESPONSE}" | jq -r '.number // empty')
 echo ${PULL_NUMBER}
 echo ${RESPONSE}
