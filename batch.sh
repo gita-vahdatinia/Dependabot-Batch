@@ -87,7 +87,7 @@ RESPONSE=$(curl --location --request POST \
   "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls" \
   -H 'Accept: application/vnd.github+json' \
   -H "Authorization: token ${GITHUB_TOKEN}" \
-  --data-raw '{"title":"'"$PR_TITLE"'","body": "''$GITHUB_BODY''", "head":"'"$BRANCH_TITLE"'","base":"main"}')
+  --data-raw '{"title":"'"$PR_TITLE"'","body":"'"$GITHUB_BODY"'", "head":"'"$BRANCH_TITLE"'","base":"main"}')
 PULL_NUMBER=$(echo "${RESPONSE}" | jq -r '.number // empty')
 echo ${PULL_NUMBER}
 echo ${RESPONSE}
@@ -100,9 +100,8 @@ fi
 PULL_NUMBER=$(echo "${RESPONSE}" | jq -r '.number // empty')
 echo ${RESPONSE}
 echo ${PULL_NUMBER}
-curl \
-  -X POST \
-  -H "Accept: application/vnd.github+json" \ 
-  -H "Authorization: token ${GITHUB_TOKEN}" \
-  "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PULL_NUMBER}/requested_reviewers" \
-  -d '{"reviewers":["'"$GITHUB_ACTOR"'"]'
+# curl --location --request POST "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PULL_NUMBER}/requested_reviewers" \
+# --header 'Accept: application/vnd.github+json' \
+# --header "Authorization: token $GITHUB_TOKEN" \
+# --header 'Content-Type: application/json' \
+# --data-raw '{"reviewers":["'"$GITHUB_ACTOR"'"]}'
