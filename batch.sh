@@ -68,7 +68,7 @@ RESPONSE=$(curl --location --request POST \
   "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls" \
   -H 'Accept: application/vnd.github+json' \ 
   -H "Authorization: token ${GITHUB_TOKEN}" \
-  --data-raw '{"title":"${PR_TITLE}","body": "${GITHUB_BODY}", "head":"github-actions:${BRANCH_TITLE}","base":"main"}')
+  --data-raw '{"title":"'"$PR_TITLE"'","body": "''$GITHUB_BODY''", "head":"github-actions:'"$BRANCH_TITLE"'","base":"main"}')
 if [[  $(echo "${RESPONSE}" | jq -r '.number') ]]; then
   echo "No PR Created"
   exit 1;
@@ -80,4 +80,4 @@ curl \
   -H "Accept: application/vnd.github+json" \ 
   -H "Authorization: token ${GITHUB_TOKEN}" \
   "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PULL_NUMBER}/requested_reviewers" \
-  -d '{"reviewers":["${GITHUB_ACTOR}"]'
+  -d '{"reviewers":["'"$GITHUB_ACTOR"'"]'
