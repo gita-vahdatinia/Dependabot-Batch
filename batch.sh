@@ -22,7 +22,7 @@ PATCHED=()
 for br in $(echo "${LIST_OF_BRANCHES}" | sort); do
   # diff package.json and Pipfile from the remote dependabot branch and then apply as a local patch.
   echo "${txtbld}Patching: $br ${txtdef}"
-  PATCHED+=(${br})
+  git diff "origin/${br}~...origin/${br}" -- ${PACKAGE_FILES} | git apply -C0 && PATCHED+=(${br}) || echo "${bldred}WARNING: Skipping failed patch ${br}${txtdef}"
 done
 
 echo ${PATCHED}
