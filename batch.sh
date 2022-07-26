@@ -86,8 +86,9 @@ RESPONSE=$(curl --location --request POST \
   -H 'Accept: application/vnd.github+json' \
   -H "Authorization: token ${GITHUB_TOKEN}" \
   --data-raw '{"title":"'"$PR_TITLE"'","body": "''$GITHUB_BODY''", "head":"github-actions:'"$BRANCH_TITLE"'","base":"main"}')
-sudo apt-get install jq
 PULL_NUMBER=$(echo "${RESPONSE}" | jq -r '.number // empty')
+echo ${PULL_NUMBER}
+echo ${RESPONSE}
 
 if [[  -z "${PULL_NUMBER}" ]]; then
   echo "No PR Created"
