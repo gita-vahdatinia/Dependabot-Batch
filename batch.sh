@@ -61,11 +61,24 @@ $(
 ")
 git commit -m ${GITHUB_BODY} -- ${PACKAGE_FILES} ${LOCK_FILES}
 
-PR_TITLE=$(echo "${BRANCH_TITLE} | tr "-" " " | tr "_" " " | tr "/" " ")
+PR_TITLE=$(echo "${BRANCH_TITLE}" | tr "-" " " | tr "_" " " | tr "/" " ")
 git push --set-upstream origin ${BRANCH_TITLE}
-curl \
+
+RESPONSE=$(curl -s \
 -X POST \
 -H "Accept: application/vnd.github+json" \ 
 -H "Authorization: token ${GITHUB_TOKEN}" \
 https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls \
--d '{"title":"${PR_TITLE}","body": "${GITHUB_BODY}, "head":"github-actions:${BRANCH_TITLE}","base":"main"}'
+-d '{"title":"${PR_TITLE}","body": "${GITHUB_BODY}", "head":"github-actions:${BRANCH_TITLE}","base":"main"}')
+if [[  $(echo "${RESPONSE}" | jq -r '.number') ]]; then
+  echo "No PR Created"
+  exit 1;
+fi
+
+PULL_NUMBER=$(echo "${RESPONSE}" | jq -r '.number')
+curl \
+  -X POST \
+  -H "Accept: application/vnd.github+json" \ 
+  -H "Authorization: token ${GITHUB_TOKEN}" \
+  https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PULL_NUMBER}/requested_reviewers \
+  -d '{"reviewers":["${GITHUB_ACTOR}"]'
